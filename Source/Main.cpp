@@ -15,9 +15,10 @@ int main() {
 	x[0] = 1;
 	x[1] = 2;
 	x[3] = 3;
+	rowvec y = x.t();
 	cout << size(A) << endl;
 	cout << A.size() << endl;
-	cout << dot(x,x);
+	cout << dot(x,y);
 
 	cin.get();
 	return 0;
