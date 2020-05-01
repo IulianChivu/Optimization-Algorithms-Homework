@@ -1,4 +1,5 @@
 #pragma once
+#pragma once
 #include<armadillo>
 using namespace arma;
 
@@ -14,12 +15,5 @@ using namespace arma;
 
 double fELP(vec x) { //not the function yet
 
-	return dot(x, x);
+	return dot(x.t(), x);
 }
-
-
-
-
-
-
-
