@@ -1,6 +1,6 @@
 #pragma once
 #include<armadillo>
-#define _USE_MATH_DEFINES //to be able to se M_PI, must be defined before math.h
+#define _USE_MATH_DEFINES //to be able to see M_PI, must be defined before math.h
 #include<math.h>
 using namespace arma;
 
@@ -65,6 +65,40 @@ double fACKL(vec x) {
 	double second_exp = exp(1.0 / x.size() * second_sum);
 	
 	return 20.0 + exp(1) - 20.0 * first_exp - second_exp;
+}
+
+double fRTG(vec x) {
+
+	double sum = 0.0;
+	for (int j = 0; j < x.size(); j++)
+		sum += x[j] * x[j] - 10.0 * cos(2.0 * M_PI * x[j]);
+	sum += 10.0 * x.size();
+
+	return sum;
+}
+
+double fRRTG(vec x) {
+
+	mat A(x.size(), x.size());
+	A.fill(0.0);
+
+	for (int j = 0; j < x.size(); j++) 
+		A(j, j) = 4.0 / 5.0;
+	for (int j = 0; j < x.size() - 1; j++)
+	//warning about arithmetic overflow for A(j, j+1) -> casting a 4 byte value to an 8 byte one
+		if ((j+1) % 2 != 0) A(j, j + 1) = 3.0 / 5.0;
+	for (int j = 1; j < x.size(); j++)
+	//warning about arithmetic overflow for A(j, j-1) -> casting a 4 byte value to an 8 byte one
+		if ((j+1) % 2 == 0) A(j, j - 1) = -3.0 / 5.0;
+	
+
+
+	vec y = A * x;
+	double sum = 0.0;
+	for (int j = 0; j < y.size(); j++)
+		sum += y[j] * y[j] - 10.0 * cos(2 * M_PI * y[j]);
+
+	return 10 * y.size() + sum;
 }
 
 
