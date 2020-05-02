@@ -9,9 +9,12 @@ int main() {
 	cout << "TOP" << endl;
 	cout << "TOP" << endl;
 
-	vec x = { 1,1,1 };
-	//rowvec y = x.t();
-	cout << fELP(x);
+	vec x = { 1.0, 2.0, 1.0 };
+	
+	cout << fELP(x) << endl;
+	cout << fSCH(x) << endl;
+	cout << fROS(x) << endl;
+	cout << fACKL(x) << endl;
 
 	return 0;
 }
