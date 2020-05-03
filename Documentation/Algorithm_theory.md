@@ -16,3 +16,4 @@
 	* pentru fiecare din cei 2B participanti calculam probabilitatea lor de a supravietui: p(x1) = (f(x1) - fbest) / (suma de la 1 la 2B din(f(xi)) - 2*B*fbest)
 	* unde:
 		* fbest -> valoarea functiei celui mai bun individ dintre cei 2B
+1. Go to pas 2 pana cand numarul maxim de pasi este atins (10^6) sau avem o eroare mai mica de 10^-20
