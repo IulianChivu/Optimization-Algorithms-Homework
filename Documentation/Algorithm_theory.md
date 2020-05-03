@@ -12,8 +12,11 @@
 			* x(1) -> caracteristica parintelui 1
 			* x(2) -> caracteristica parintelui 2
 			* n -> parametru pe care putem sa-l variem (cu cat n e mai mare cu cat copilul va fi mai aproape de zona parintilor)
-1. ?B? parinti sunt alesi random sa concureze cu cei B copii(pdf: 3.2 pag5); folosim algoritmul ***probabilistic crowding replacement:***
-	* pentru fiecare din cei 2B participanti calculam probabilitatea lor de a supravietui: p(x1) = (f(x1) - fbest) / (suma de la 1 la 2B din(f(xi)) - 2*B*fbest)
+1. B NREP din populatia curenta sunt alesi random sa concureze cu cei B copii(pdf: 3.2 pag5); folosim algoritmul ***probabilistic crowding replacement:***
+	* combinam copii cu NREP astfel: selectam un copil si cel mai apropiat NREP de el si calculam probabilitatea lor de a fi eliminati: 
+		* copil : p(x1) = (f(x1) - fbest) / (f(x1) + f(x2) - 2*fbest)
+		* NREP : p(x2) = (f(x2) - fbest) / (f(x1) + f(x2) - 2*fbest)
 	* unde:
-		* fbest -> valoarea functiei celui mai bun individ dintre cei 2B
+		* fbest -> valoarea functiei celui mai bun individ dintre cei 2*B
+		* daca cel mai bun este copil sau parinte actual, atunci individul care intra in competitie cu el va avea sanse 0 sa fie eliminat
 1. Go to pas 2 pana cand numarul maxim de pasi este atins (10^6) sau avem o eroare mai mica de 10^-20
