@@ -3,7 +3,7 @@
 using namespace std;
 
 //distributie normala(Gauss)
-double normal_dis(float medie, float dispersie) {
+double normal_dis(double medie, double dispersie) {
 	default_random_engine generator;
 	normal_distribution<double> distribution(medie, dispersie);
 	return distribution(generator);
