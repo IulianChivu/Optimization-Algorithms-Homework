@@ -1,4 +1,4 @@
-# Teorie GA:
+# Teorie GA (by Iulian)
 #### O sa implementam un algoritm genetic de tip SPC-PNX:
 1. Initializare a A puncte in intervalul [-10,-5] (populatia initiala)
 1. Doi parinti sunt selectati random din cei A pentru a produce B copii prin ***crossover*** pentru fiecare dintre cei B copii procedam astfel:
@@ -20,3 +20,32 @@
 		* fbest -> valoarea functiei celui mai bun individ dintre cei 2*B
 		* daca cel mai bun este copil sau parinte actual, atunci individul care intra in competitie cu el va avea sanse 0 sa fie eliminat
 1. Go to pas 2 pana cand numarul maxim de pasi este atins (10^6) sau avem o eroare mai mica de 10^-20
+
+# Teorie GA (by Bogdan)
+
+Algoritmul genetic de implementat este SPC-PNX (scaled probabilistic crowding genetic algorithm with parent centric normal crossover). Algoritmul dispune de urmatoarele 3 faze in ordine:
+
+- Selectie
+- Recombinare (crossover)
+- Inlocuirea indivizilor in populatie pentru a pastra pe aceasta *constanta*.
+
+**Conditii initiale:** o populatie de dimensiune **N** cu indivizi *M-dimensionali*.
+
+## Pasii algoritmului
+
+1. **Initializarea populatiei**
+	1. Initializarea variabilelor de care depinde operatia de recombinare
+	2. Initializarea componentelor indivizilor cu valori aleatoare in intervalul [-10 -5]
+2. **Recombinarea (de tip PNX)**
+	1. Din populatia curenta se aleg aleator dupa o **distributie uniforma**,  **2** parinti
+	2. Se doreste ca din cei 2 parinti selectati sa rezulte **lambda copii**. Pentru fiecare copil:
+		- Se alege un numar aleator **w** din intervalul [0 1]
+		-  Daca **w** < 0.5 folosim forma (1) pentru a determina genele copilului
+		-  Daca **w** >= 0.5 folosim forma (2) pentru a determina genele copilului
+		- Genele copilului se determina alegand pentru fiecare un numar aleator ce urmeaza o **distributie gaussiana** N(miu, sigma) de medie miu si dispersie sigma
+3. **Selectia (replacement)**
+	1. Se aleg aleator un numar de **NREP = 2** indivizi din populatia curenta (ce va avea **N + lambda** indivizi) 
+	2. Indivizii selectati la pasul anterior concureaza cu cei **lambda** copii pentru un loc in populatie. Se alege cel mai bun (fittest) individ Fbest din multimea copiiilor reunita cu multimea indivizilor selectati (**lambda** + **NREP**)
+	3. ??? Se selecteaza pentur fiecare copil un individ din multimea celor **NREP = 2** cu scopul de a concura pentru un loc in populatie. Pastrarea unui individ se face dupa setul 3 de formule probabilistice
+	4. ???
+4. **??? Se evalueaza functia obiectiv pentru fiecare individ si daca nu s-au atins un numar de 10^6 sondari ale functiei SAU o eroare de 10^-20 (10^-10 pentru anumite functii obiectiv) se continua algoritmul de la pasul 2; ALTFEL se returneaza cel mai bun individ ca solutie de optim**
