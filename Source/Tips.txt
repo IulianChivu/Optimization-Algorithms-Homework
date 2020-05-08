@@ -1,0 +1,7 @@
+- must read mentioned variables from Input and make them constant afterwards,
+you can try to figure that out
+- please fix Random.h :((
+- you can implement the crossover functions or at least one of them, left you a prototype
+- you can continue implementing the algorithm in main
+- I did not implement anything related to the parameters that the normal distribution function 
+receives in the crossover process
