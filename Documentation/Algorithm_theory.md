@@ -44,8 +44,8 @@ Algoritmul genetic de implementat este SPC-PNX (scaled probabilistic crowding ge
 		-  Daca **w** >= 0.5 folosim forma (2) pentru a determina genele copilului
 		- Genele copilului se determina alegand pentru fiecare un numar aleator ce urmeaza o **distributie gaussiana** N(miu, sigma) de medie miu si dispersie sigma
 3. **Selectia (replacement)**
-	1. Se aleg aleator un numar de **NREP = 2** indivizi din populatia curenta (ce va avea **N + lambda** indivizi) 
-	2. Indivizii selectati la pasul anterior concureaza cu cei **lambda** copii pentru un loc in populatie. Se alege cel mai bun (fittest) individ Fbest din multimea copiiilor reunita cu multimea indivizilor selectati (**lambda** + **NREP**)
-	3. ??? Se selecteaza pentur fiecare copil un individ din multimea celor **NREP = 2** cu scopul de a concura pentru un loc in populatie. Pastrarea unui individ se face dupa setul 3 de formule probabilistice
-	4. ???
-4. **??? Se evalueaza functia obiectiv pentru fiecare individ si daca nu s-au atins un numar de 10^6 sondari ale functiei SAU o eroare de 10^-20 (10^-10 pentru anumite functii obiectiv) se continua algoritmul de la pasul 2; ALTFEL se returneaza cel mai bun individ ca solutie de optim**
+	- ??? Pentru fiecare copil:
+		- Se alege un numar de **NREP = 2** indivizi aleator din populatie 
+		- Din multimea de **NREP = 2** indivizi se alege individul "cel mai apropiat" de copilul curent
+		- Individul selectat la pasul anterior intra intr-un turneu probabilistic cu copilul curent cu scopul de a concura pentru un loc in populatie, se foloseste setul (2) de probabilitati pentru a decide cine ramane in populatie
+4. **Se evalueaza functia obiectiv pentru fiecare individ si daca nu s-au atins un numar de 10^6 sondari ale functiei SAU o eroare de 10^-20 (10^-10 pentru anumite functii obiectiv) se continua algoritmul de la pasul 2; ALTFEL se returneaza cel mai bun individ ca solutie de optim**
