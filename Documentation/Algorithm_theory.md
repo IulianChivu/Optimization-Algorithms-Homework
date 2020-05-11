@@ -48,4 +48,5 @@ Algoritmul genetic de implementat este SPC-PNX (scaled probabilistic crowding ge
 		- Se alege un numar de **NREP = 2** indivizi aleator din populatie 
 		- Din multimea de **NREP = 2** indivizi se alege individul "cel mai apropiat" de copilul curent
 		- Individul selectat la pasul anterior intra intr-un turneu probabilistic cu copilul curent cu scopul de a concura pentru un loc in populatie, se foloseste setul (2) de probabilitati pentru a decide cine ramane in populatie
+		- Aici inca exista o neclaritate, dupa ce se va decide *cst* din *NREP* presupun ca acesta va fi marcat pentru urmatoarele turnee pentru a nu putea fi selectat din nou ?!, deoarece indiferent cine castiga (*cst* sau *ofp* ) acel individ va avea un loc asigurat in populatie ?!
 4. **Se evalueaza functia obiectiv pentru fiecare individ si daca nu s-au atins un numar de 10^6 sondari ale functiei SAU o eroare de 10^-20 (10^-10 pentru anumite functii obiectiv) se continua algoritmul de la pasul 2; ALTFEL se returneaza cel mai bun individ ca solutie de optim**
