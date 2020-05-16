@@ -12,10 +12,10 @@ int main() {
 	//Variable declarations
 	ifstream fileIn("In.txt");
 	ofstream fileOut("Out.txt");
-	const int MAX_FUNCTION_EVAL = 10e6; 
+	const int MAX_FUNCTION_EVAL = 1e6; 
 	default_random_engine generator; //don't know
 	normal_distribution<double> distribution(-7.5, 0.99);//don't know
-	const int M = 4; //No. of dimensions of an individual
+	const int M = 5; //No. of dimensions of an individual
 					//must find a way to read it from file and make it const
 	const int N = 35; //No. of population individuals
 					//must find a way to read it from file and make it const
@@ -85,6 +85,7 @@ int main() {
 	for (it = population.begin(); it != population.end(); it++)
 		fileOut << fELP(*it) << endl;
 
+	fileOut << MAX_FUNCTION_EVAL << endl;
 	fileIn.close();
 	fileOut.close();
 	return 0;
