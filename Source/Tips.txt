@@ -2,4 +2,8 @@
 you can try to figure that out
 - please fix Random.h :((
 - you can continue implementing the algorithm in main in the Selection area
+- "PNX-2.0" -> pretty sure the 2.0 refers to the mean used to draw a number from the Normal 
+Distribution
+- I considered distance to be the absolute value of the difference in function values of 
+two individuals
 
