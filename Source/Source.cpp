@@ -20,8 +20,8 @@ int main() {
 	//down varies but up doesen't
 	const int runs = 10; //
 	const int M = 20; //No. of dimensions of an individual
-	const int N = 35; //No. of population individuals
-	const int lambda = 1; //No. of children
+	const int N = 400; //No. of population individuals
+	const int lambda = 4; //No. of children
 	//up varies but down doesen't
 	const double niu = 2.0; //Mean used for crossover as parameter for the Normal Distribution
 	const int NREP = 2; //No. of preselected individuals to compete for a place in the
@@ -84,7 +84,7 @@ int main() {
 			//Selection
 			for (xOFP = children.begin(); xOFP != children.end(); xOFP++) {
 
-				double min = fELP(*xOFP);//Initialize min to find the best individual fBest
+				double min = fRRTG(*xOFP);//Initialize min to find the best individual fBest
 				double distMin;
 				fBest = *xOFP;//Initialize fBest as xOFP
 
@@ -97,21 +97,21 @@ int main() {
 
 				//The NREP set of individuals and determining the fBEST individual
 				for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
-					if (fELP(*pI) < min) {
-						min = fELP(*pI);
+					if (fRRTG(*pI) < min) {
+						min = fRRTG(*pI);
 						fBest = *pI;
 					}
 				}
 
 				//Determining the closest preselected individual
 				int index = 0; //index of closest  preselected individual
-				distMin = fabs(fELP(preselectedIndividuals[0]) - fELP(*xOFP));
+				distMin = fabs(fRRTG(preselectedIndividuals[0]) - fRRTG(*xOFP));
 				xCST = preselectedIndividuals[0];
 				for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
 
-					if (fabs(fELP(*pI) - fELP(*xOFP)) < distMin) {
+					if (fabs(fRRTG(*pI) - fRRTG(*xOFP)) < distMin) {
 
-						distMin = fabs(fELP(*pI) - fELP(*xOFP));
+						distMin = fabs(fRRTG(*pI) - fRRTG(*xOFP));
 						xCST = *pI;
 						index = (int)(pI - preselectedIndividuals.begin());
 					}
@@ -120,8 +120,8 @@ int main() {
 				//Add fBEST condition here (The fittest individual does not always win)
 
 				//Determining culling probabilities for xCST and xOFP
-				double pOFP = (fELP(*xOFP) - fELP(fBest)) / (fELP(*xOFP) + fELP(xCST) - 2 * fELP(fBest));
-				double pCST = (fELP(xCST) - fELP(fBest)) / (fELP(*xOFP) + fELP(xCST) - 2 * fELP(fBest));
+				double pOFP = (fRRTG(*xOFP) - fRRTG(fBest)) / (fRRTG(*xOFP) + fRRTG(xCST) - 2 * fRRTG(fBest));
+				double pCST = (fRRTG(xCST) - fRRTG(fBest)) / (fRRTG(*xOFP) + fRRTG(xCST) - 2 * fRRTG(fBest));
 
 				//If xOFP wins, we replace xCST with xOFP in the population
 				if (pOFP < pCST) {
@@ -135,12 +135,12 @@ int main() {
 			}
 
 			//Determining the best individual in population as soultuion
-			optimum = fELP(population[0]);
+			optimum = fRRTG(population[0]);
 			bestIndividualIndex = 0;
 			for (it = population.begin(); it != population.end(); it++)
-				if (fELP(*it) < optimum) {
+				if (fRRTG(*it) < optimum) {
 
-					optimum = fELP(*it);
+					optimum = fRRTG(*it);
 					bestIndividualIndex = (int)(it - population.begin());
 				}
 			//Update the number of function evaluations
