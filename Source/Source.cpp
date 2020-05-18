@@ -7,22 +7,22 @@
 using namespace std;
 using namespace arma;
 
+
 int main() {
 
 	//Variable declarations
-	ifstream fileIn("In.txt");
 	ofstream fileOut("Out.txt");
 	int functionEval = 0; //Number of function evaluations
 	double optimum; //The value returned as the optimum solution
 	int bestIndividualIndex; //Index of the optimum in population
 	const int MAX_FUNCTION_EVAL = 1e6; 
 	const double TARGET = 1e-20; //Target value for most objective functions
+	//down varies but up doesen't
+	const int runs = 10; //
 	const int M = 20; //No. of dimensions of an individual
-					//must find a way to read it from file and make it const
 	const int N = 35; //No. of population individuals
-					//must find a way to read it from file and make it const
 	const int lambda = 1; //No. of children
-					//must find a way to read it from file and make it const
+	//up varies but down doesen't
 	const double niu = 2.0; //Mean used for crossover as parameter for the Normal Distribution
 	const int NREP = 2; //No. of preselected individuals to compete for a place in the
 					  //population
@@ -41,111 +41,121 @@ int main() {
 	uniform_real_distribution<double> unif_distribution_w(0.0, 1.0); //draw a random number in [0 1]
 	srand((unsigned)time(NULL)); //radnom seed for random_init()
 
-	//Must have a do-while() loop here for the runs
+	for (int r = 0; r < runs; r++) {
 
-	//Popoulation initializations
-	for (it = population.begin(); it != population.end(); it++)
-		for (int i = 0; i < M; i++)
-			it->at(i) = random_init(-10, -5); //random initialization between [-10,-5]
+		//Popoulation initializations
+		for (it = population.begin(); it != population.end(); it++)
+			for (int i = 0; i < M; i++)
+				it->at(i) = random_init(-10, -5); //random initialization between [-10,-5]
 
+		functionEval = 0; //Reset the number of function evaluations for every run
 
-	do {
+		do {
 
-		//Parental selection
-		//Choosing two individuals from the current population
-		parent1 = population[(int)unif_distribution(generator)];
-		parent2 = population[(int)unif_distribution(generator)];
-		while (approx_equal(parent1, parent2, "absdiff", 0.0) == true) { //we make sure that we did not extract the same individual
+			//Parental selection
+			//Choosing two individuals from the current population
+			parent1 = population[(int)unif_distribution(generator)];
 			parent2 = population[(int)unif_distribution(generator)];
-		}
+			while (approx_equal(parent1, parent2, "absdiff", 0.0) == true) { //we make sure that we did not extract the same individual
+				parent2 = population[(int)unif_distribution(generator)];
+			}
 
-		//Crossover
-		for (xOFP = children.begin(); xOFP != children.end(); xOFP++) {
+			//Crossover
+			for (xOFP = children.begin(); xOFP != children.end(); xOFP++) {
 
-			//draw a random number in [0 1]
-			double w = unif_distribution_w(generator);
-			if (w < 0.5)
-				for (int j = 0; j < parent1.size(); j++)
-					xOFP->at(j) = normal_dis(parent1[j], fabs(parent2[j] - parent1[j]) / niu);
-			else //works only if w is a number in [0 1]
-				for (int j = 0; j < parent2.size(); j++)
-					xOFP->at(j) = normal_dis(parent2[j], fabs(parent2[j] - parent1[j]) / niu);
+				//draw a random number in [0 1]
+				double w = unif_distribution_w(generator);
+				if (w < 0.5)
+					for (int j = 0; j < parent1.size(); j++) {
+						double sigma = fabs(parent2[j] - parent1[j]) / niu;
+						if (sigma == 0.0) sigma = 0.001;
+						xOFP->at(j) = normal_dis(parent1[j], sigma);
+					}
+				else //works only if w is a number in [0 1]
+					for (int j = 0; j < parent2.size(); j++) {
+						double sigma = fabs(parent2[j] - parent1[j]) / niu;
+						if (sigma == 0.0) sigma = 0.000001;
+						xOFP->at(j) = normal_dis(parent1[j], sigma);
+					}
 
-		}
+			}
 
-		//Selection
-		for (xOFP = children.begin(); xOFP != children.end(); xOFP++) {
+			//First encounter of the objective function here
+			//Selection
+			for (xOFP = children.begin(); xOFP != children.end(); xOFP++) {
 
-			double min = fROS(*xOFP);//Initialize min to find the best individual fBest
-			double distMin;
-			fBest = *xOFP;//Initialize fBest as xOFP
+				double min = fELP(*xOFP);//Initialize min to find the best individual fBest
+				double distMin;
+				fBest = *xOFP;//Initialize fBest as xOFP
 
-			//Choosing the preselected individuals at random from the population
-			preselectedIndividuals[0] = population[(int)unif_distribution(generator)];
-			preselectedIndividuals[1] = population[(int)unif_distribution(generator)];
-			while (approx_equal(preselectedIndividuals[0], preselectedIndividuals[1], "absdiff", 0.0) == true) { //we make sure that we did not extract the same individual
+				//Choosing the preselected individuals at random from the population
+				preselectedIndividuals[0] = population[(int)unif_distribution(generator)];
 				preselectedIndividuals[1] = population[(int)unif_distribution(generator)];
-			}
-
-			//The NREP set of individuals and determining the fBEST individual
-			for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
-				if (fROS(*pI) < min) {
-					min = fROS(*pI);
-					fBest = *pI;
+				while (approx_equal(preselectedIndividuals[0], preselectedIndividuals[1], "absdiff", 0.0) == true) { //we make sure that we did not extract the same individual
+					preselectedIndividuals[1] = population[(int)unif_distribution(generator)];
 				}
-			}
 
-			//Determining the closest preselected individual
-			int index = 0; //index of closest  preselected individual
-			distMin = fabs(fROS(preselectedIndividuals[0]) - fROS(*xOFP));
-			xCST = preselectedIndividuals[0];
-			for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
-
-				if (fabs(fROS(*pI) - fROS(*xOFP)) < distMin) {
-
-					distMin = fabs(fROS(*pI) - fROS(*xOFP));
-					xCST = *pI;
-					index = (int)(pI - preselectedIndividuals.begin());
+				//The NREP set of individuals and determining the fBEST individual
+				for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
+					if (fELP(*pI) < min) {
+						min = fELP(*pI);
+						fBest = *pI;
+					}
 				}
-			}
 
-			//Add fBEST condition here (The fittest individual does not always win)
+				//Determining the closest preselected individual
+				int index = 0; //index of closest  preselected individual
+				distMin = fabs(fELP(preselectedIndividuals[0]) - fELP(*xOFP));
+				xCST = preselectedIndividuals[0];
+				for (pI = preselectedIndividuals.begin(); pI != preselectedIndividuals.end(); pI++) {
 
-			//Determining culling probabilities for xCST and xOFP
-			double pOFP = (fROS(*xOFP) - fROS(fBest)) / (fROS(*xOFP) + fROS(xCST) - 2 * fROS(fBest));
-			double pCST = (fROS(xCST) - fROS(fBest)) / (fROS(*xOFP) + fROS(xCST) - 2 * fROS(fBest));
+					if (fabs(fELP(*pI) - fELP(*xOFP)) < distMin) {
 
-			//If xOFP wins, we replace xCST with xOFP in the population
-			if (pOFP < pCST) {
-				for (it = population.begin(); it != population.end(); it++) {
-					if (approx_equal(preselectedIndividuals[index], *it, "absdiff", 0.0) == true) {
-						*it = *xOFP;
-						break;
+						distMin = fabs(fELP(*pI) - fELP(*xOFP));
+						xCST = *pI;
+						index = (int)(pI - preselectedIndividuals.begin());
+					}
+				}
+
+				//Add fBEST condition here (The fittest individual does not always win)
+
+				//Determining culling probabilities for xCST and xOFP
+				double pOFP = (fELP(*xOFP) - fELP(fBest)) / (fELP(*xOFP) + fELP(xCST) - 2 * fELP(fBest));
+				double pCST = (fELP(xCST) - fELP(fBest)) / (fELP(*xOFP) + fELP(xCST) - 2 * fELP(fBest));
+
+				//If xOFP wins, we replace xCST with xOFP in the population
+				if (pOFP < pCST) {
+					for (it = population.begin(); it != population.end(); it++) {
+						if (approx_equal(preselectedIndividuals[index], *it, "absdiff", 0.0) == true) {
+							*it = *xOFP;
+							break;
+						}
 					}
 				}
 			}
-		}
 
-		//Determining the best individual in population as soultuion
-		optimum = fROS(population[0]);
-		bestIndividualIndex = 0;
-		for (it = population.begin(); it != population.end(); it++)
-			if (fROS(*it) < optimum) {
+			//Determining the best individual in population as soultuion
+			optimum = fELP(population[0]);
+			bestIndividualIndex = 0;
+			for (it = population.begin(); it != population.end(); it++)
+				if (fELP(*it) < optimum) {
 
-				optimum = fROS(*it);
-				bestIndividualIndex = (int)(it - population.begin());
-			}
-		//Update the number of function evaluations
-		functionEval += population.size();
+					optimum = fELP(*it);
+					bestIndividualIndex = (int)(it - population.begin());
+				}
+			//Update the number of function evaluations
+			functionEval += population.size();
 
-	} while (optimum >= TARGET && functionEval <= MAX_FUNCTION_EVAL);
-	
+		} while (optimum >= TARGET && functionEval <= MAX_FUNCTION_EVAL);
 
-	fileOut << "Optimul: " << optimum << endl;
-	fileOut << "No. of function evaluations: " << functionEval << endl;
-	fileOut << "Optimum achived for this individual: " << endl << population[bestIndividualIndex] << endl;
 
-	fileIn.close();
+		fileOut << "Optimul: " << optimum << endl;
+		fileOut << "No. of function evaluations: " << functionEval << endl;
+		fileOut << "Optimum achived for this individual: " << endl << population[bestIndividualIndex] << endl;
+
+
+	}
+
 	fileOut.close();
 	return 0;
 }

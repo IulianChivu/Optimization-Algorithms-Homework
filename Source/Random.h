@@ -17,3 +17,4 @@ double random_init(double min, double max) { // random between [min,max];
 	out = min + out * (max - min); //random bewtween [min,max]
 	return out;
 }
+

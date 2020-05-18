@@ -166,7 +166,6 @@
     <ClInclude Include="Random.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="In.txt" />
     <Text Include="Out.txt" />
     <Text Include="Tips.txt" />
   </ItemGroup>
