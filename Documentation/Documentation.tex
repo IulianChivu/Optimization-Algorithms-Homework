@@ -21,7 +21,37 @@ Urmatoarele sectiuni ce vor fi descrise sunt o imagine a modului in care am reus
 \newpage
 
 \section{Descrierea Algoritmului}
-
 Algoritmul descris de studiul de cercetare se intituleaza "Scaled Probabilistic Crowding Genetic Algorithm with Parent Centric Normal crossover" la care ne vom referi pe tot parcursul lucrarii ca SPC-PNX. 
+\newline
+Acest model de algoritm genetic foloseste un numar constant de indivizi care fac parte din populatie. In fiecare generatie doi parinti sunt selectati din aceasta populatie pentru a crea $\lambda$ copii prin metoda crossover. Apoi se elimina din populatie sau din copii creati astfel incat populatia sa ramana constanta. 
+
+\subsection{Selectia}
+In general pentru algoritmi genetici, selectia nu depinde de valoare functiei fiecarui individ. De aceea folosim o selectie aleatoare dupa o distributie uniforma, pentru a selecta doi parinti  din populatia curenta.
+
+\subsection{Crossover}
+Pentru fiecare  $\lambda$ copil creat prin aceasta metoda procedam astfel pentru a-i calcula componenta j $(y_{j})$ : Prima data tragem un numar aleator $\omega$ care apartine intervalului [0,1], daca $\omega$ $<$ 0.5  atunci folosim forma $y_{j}^{(1)}$, daca $\omega$ $\leq$ 0.5 atunci folosim forma $y_{j}^{(2)}$. Odata ce una din forme a fost aleasa, aceasta va fi folosita pentru toate cele j componente ale copilului. Aceste forme se calculeaza astfel:  \vspace{5mm}
+
+\centerline{$y_{j}^{(1)} = N(x_{j}^{(1)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ \hspace{1cm} $y_{j}^{(2)} = N(x_{j}^{(2)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ } \vspace{5mm}
+
+Unde:
+\newline
+- $N(\mu,\sigma)$ reprezinta un numar aleator dintr-o distributie normala cu media $\mu$ si dispersia $\sigma$
+\newline
+- $x_{j}^{(i)}$ reprezinta componenta numarul j a parintelui i
+\newline
+- $\eta$ este un paramentru variabil. Cu cat $\eta$ este mai mare, copilul se afla mai aproape de zona parintilor.
+\newpage
+
+\subsection{Selectia (Scaled Probabilistic Crowding Replacement)}
+Se selecteaza aleator $\kappa$ indivizi din populatia curenta, pentru a concura cu cei $\lambda$ copii pentru un loc in populatie.
+\newline
+Pentru fiecare copil $(x^{ofp})$ se determina care individ din cei $\kappa$ selectati se afla mai aproape de el  $(x^{cst})$. Apoi se calculeaza pentru fiecare probabilitatea de eliminare din populatie astfel: \vspace{5mm}
+
+\centerline{ $p(x^{ofp}) = \frac{f(x^{ofp}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ \hspace{1cm} $p(x^{cst}) = \frac{f(x^{cst}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ } \vspace{5mm}
+
+Unde $f_{best}$ este valoarea functiei celui mai mai bun individ din cei $\lambda$ copii si cei $\kappa$ indivizi selectati.
+
+
+
 
 \end{document}
