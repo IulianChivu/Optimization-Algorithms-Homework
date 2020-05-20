@@ -17,21 +17,22 @@ Algoritmii genetici sunt o subclasa a algoritmilor evolutivi ce se pot aplica in
 \newline
 Prezenta lucrare are ca scop implementarea unui algoritm genetic specific apartinand unei lucrari de studiu de cercetare. Lucrarea de cercetare se intituleaza "An Effective Real-Parameter Genetic Algorithm with Parent Centric Normal Crossover for Multimodal Optimisation" si este realizata de Pedro J. Ballester si Jonathan N. Carter in anul 2004. 
 \newline
-Urmatoarele sectiuni ce vor fi descrise sunt o imagine a modului in care am reusit sa intelegem notiunile teoretice din spatele acestui studiu, a modului in care am reusit sa implementam algoritmul si in care am interpretat rezultatele obtinute; si nu o reprezentare exacta a studiului, astfel am incercat pe cat posibil sa reproducem algoritmul si performantele sale.
+Urmatoarele sectiuni ce vor fi descrise sunt o imagine a modului in care am reusit sa intelegem notiunile teoretice din spatele acestui studiu, a modului in care am reusit sa implementam algoritmul si in care am interpretat rezultatele obtinute; si nu o reprezentare exacta a studiului, deoarece am incercat pe cat posibil sa reproducem algoritmul si performantele sale.
 \newpage
 
 \section{Descrierea Algoritmului}
+
 Algoritmul descris de studiul de cercetare se intituleaza "Scaled Probabilistic Crowding Genetic Algorithm with Parent Centric Normal crossover" la care ne vom referi pe tot parcursul lucrarii ca SPC-PNX. 
 \newline
-Acest model de algoritm genetic foloseste un numar constant de indivizi care fac parte din populatie. In fiecare generatie doi parinti sunt selectati din aceasta populatie pentru a crea $\lambda$ copii prin metoda crossover. Apoi se elimina din populatie sau din copii creati astfel incat populatia sa ramana constanta. 
+SPC-PNX foloseste un model in care numarul de indivizi din populatie este constant iar genele fiecarui individ sunt numere reale. In fiecare generatie doi parinti sunt selectati din aceasta populatie pentru a crea $\lambda$ copii prin recombinare. Apoi se desfasoara etapa de selectie (descrisa in sectiunea 2.3) pentru a stabili indivizii ce vor ramane in populatie. 
 
-\subsection{Selectia}
-In general pentru algoritmi genetici, selectia nu depinde de valoare functiei fiecarui individ. De aceea folosim o selectie aleatoare dupa o distributie uniforma, pentru a selecta doi parinti  din populatia curenta.
+\subsection{Alegerea parintilor}
+In general pentru algoritmi genetici, alegerea parintilor depinde de valoarea functiei fiecarui individ. SPC-PNX foloseste o selectie aleatoare a parintilor dupa o distributie uniforma, pentru a selecta doi parinti din populatia curenta.
 
-\subsection{Crossover}
-Pentru fiecare  $\lambda$ copil creat prin aceasta metoda procedam astfel pentru a-i calcula componenta j $(y_{j})$ : Prima data tragem un numar aleator $\omega$ care apartine intervalului [0,1], daca $\omega$ $<$ 0.5  atunci folosim forma $y_{j}^{(1)}$, daca $\omega$ $\leq$ 0.5 atunci folosim forma $y_{j}^{(2)}$. Odata ce una din forme a fost aleasa, aceasta va fi folosita pentru toate cele j componente ale copilului. Aceste forme se calculeaza astfel:  \vspace{5mm}
+\subsection{Recombinarea}
+Pentru fiecare  $\lambda_i$ copil creat prin aceasta metoda procedam astfel pentru a-i calcula componenta j $(y_{j})$ : Prima data se extrage un numar aleator $\omega$ care apartine intervalului [0,1], daca $\omega$ $<$ 0.5  atunci folosim forma $y_{j}^{(1)}$, daca $\omega$ $\leq$ 0.5 atunci folosim forma $y_{j}^{(2)}$. Odata ce una din forme a fost aleasa, aceasta va fi folosita pentru toate cele j componente ale copilului. Aceste forme se calculeaza astfel:  \vspace{5mm}
 
-\centerline{$y_{j}^{(1)} = N(x_{j}^{(1)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ \hspace{1cm} $y_{j}^{(2)} = N(x_{j}^{(2)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ } \vspace{5mm}
+\centerline{$y_{j}^{(1)} = N(x_{j}^{(1)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ \hspace{1cm} $y_{j}^{(2)} = N(x_{j}^{(2)}, |x_{j}^{(2)} - x_{j}^{(1)}|/\eta)$ \hspace{1cm}$(1)$ } \vspace{5mm}
 
 Unde:
 \newline
@@ -39,7 +40,7 @@ Unde:
 \newline
 - $x_{j}^{(i)}$ reprezinta componenta numarul j a parintelui i
 \newline
-- $\eta$ este un paramentru variabil. Cu cat $\eta$ este mai mare, copilul se afla mai aproape de zona parintilor.
+- $\eta$ este un paramentru variabil. Cu cat $\eta$ este mai mare, copilul se afla mai aproape de arealul parintilor.
 \newpage
 
 \subsection{Selectia (Scaled Probabilistic Crowding Replacement)}
@@ -47,11 +48,60 @@ Se selecteaza aleator $\kappa$ indivizi din populatia curenta, pentru a concura 
 \newline
 Pentru fiecare copil $(x^{ofp})$ se determina care individ din cei $\kappa$ selectati se afla mai aproape de el  $(x^{cst})$. Apoi se calculeaza pentru fiecare probabilitatea de eliminare din populatie astfel: \vspace{5mm}
 
-\centerline{ $p(x^{ofp}) = \frac{f(x^{ofp}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ \hspace{1cm} $p(x^{cst}) = \frac{f(x^{cst}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ } \vspace{5mm}
+\LARGE
+\centerline{ $p(x^{ofp}) = \frac{f(x^{ofp}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ \hspace{1cm} $p(x^{cst}) = \frac{f(x^{cst}) - f_{best}}{f(x^{ofp}) + f(x^{cst}) - 2f_{best}}$ $ \hspace{1cm}$(2)} \vspace{5mm}
 
-Unde $f_{best}$ este valoarea functiei celui mai mai bun individ din cei $\lambda$ copii si cei $\kappa$ indivizi selectati.
+\Large
+Unde $f_{best}$ este valoarea functiei celui mai mai bun individ din multimea formata din copilul $\lambda_i$ si cei $\kappa$ indivizi selectati.
 
 
+\section{Pseudocodul algoritmului}
+\Large
+Pentru o mai buna intelegere a ideilor expuse am ales sa includem si pseudocodul sub o maniera asemanatoare descrierii metodelor din lucrarile de laborator. 
 
+\begin{enumerate}
+
+\item Initializarea unei populatii de dimensiune N cu indivizi M-dimensionali. Pentru fiecare individ $x$, componenta $x_j$ ia o valoare aleatoare din intervaulul [-10, -5].
+
+\item Se aleg aleator dupa o distributie uniforma din populatie 2 indivizi ce vor deveni parinti.
+
+\item Pentru fiecare copil se alege aleator un numar real $\omega \in [0,1]$.
+
+\item Daca $\omega \leq 0.5$ genele copilului vor rezulta din forma 2 din setul de ecuatii (1), altfel genele vor rezulta din forma 1 a aceluiasi set.
+
+\item Pentru fiecare copil se aleg aleator un numar de $k$ indivizi din populatie, se determina cel mai apropiat individ si pentru acesta si copilul curent se calculeaza probabilitatile descrise de setul (2) de ecuatii, cel cu probabilitatea mai mica va fi pastrat in populatie.
+
+\item Daca optimul este mai mare decat $10^{-20}$ sau numarul de sondari ale functiei obiectiv este mai mic de $10^6$ se trece la pasul 2, altfel se returneaza cel mai bun individ ca solutie.
+
+\newpage
+
+\section{Rezultatele obtinute si concluzii}
+
+\Large
+SPC-PNX a fost rulat pe o serie de 6 functii obiectiv multimodale: functia Elipsiod (ELP), Schwefel (SCH), Rosenbrock (ROS), Ackley (ACKL), Rastrigin (RTG) si Rotated Rastrigin (RRTG). RRTG reprezinta functia RTG insa careia i-a fost aplicata o transformare liniara pentru a anula avantajele ce rezulta in urma tendintei algoritmului de a cauta pe axele de coordonate. Rezultatele obtinute sunt prezentate in urmatorul tabel, unde "B.F." (best found) reprezinta cea mai buna solutie gasita de algoritm, "SUCCES" reprezinta de cate ori a fost gasita cea mai buna solutie intr-o serie de rulari succesive ale algoritmului. \\
+
+
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+M & N & $\lambda$ & FUNC & BEST & MED. & WORST & B.F. & SUCCES & RULARI\\
+\hline
+20 & 35 & 1 & ELP & $10^6$ & - & - & $10^{-15}$ & 1/10 & 10 \\
+\hline
+20 & 35 & 1 & SCH & $10^6$ & - & - & $10^{-1}$ & 1/10 & 10 \\
+\hline
+20 & 80 & 1 & ROS & $10^6$ & - & - & $10^{1}$ & 28/50 & 50 \\
+\hline
+20 & 50 & 1 & ACKL & $10^6$ & - & - & $10^{-4}$ & 3/10 & 10 \\
+\hline
+20 & 400 & 4 & RTG & $10^6$ & - & - & $10^{2}$ & 10/10 & 10 \\
+\hline
+20 & 400 & 4 & RRTG & $10^6$ & - & - & $10^{2}$ & 10/10 & 10 \\
+\hline
+\end{tabular}
+\vspace{1mm}
+\\ \\
+Consideram ca performantele mai reduse comparativ cu cele din studiul de cercetare sunt datorate neimplementarii corecte a algoritmului sau faptului ca algoritmul ajunge sa se blocheze intr-un minim local. Am rulat SPC-PNX si pentru o configuratie cu M = 10, in acest caz obtinand performante mai bune pentru functiile ELP, SCH si ACKL.
+
+\end{enumerate}
 
 \end{document}
