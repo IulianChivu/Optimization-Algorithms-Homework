@@ -78,9 +78,29 @@ Pentru o mai buna intelegere a ideilor expuse am ales sa includem si pseudocodul
 \section{Rezultatele obtinute si concluzii}
 
 \Large
-SPC-PNX a fost rulat pe o serie de 6 functii obiectiv multimodale: functia elipsiod(ELP), Schwefel (SCH), Rosenbrock (ROS), Ackley (ACK), Rastrigin (RTG) si Rotated Rastrigin (RRTG). RRTG reprezinta functia RTG insa careia i-a fost aplicata o transformare liniara pentru a anula avantajele ce rezulta in urma tendintei algoritmului de a cauta pe axele de coordonate.
+SPC-PNX a fost rulat pe o serie de 6 functii obiectiv multimodale: functia Elipsiod (ELP), Schwefel (SCH), Rosenbrock (ROS), Ackley (ACKL), Rastrigin (RTG) si Rotated Rastrigin (RRTG). RRTG reprezinta functia RTG insa careia i-a fost aplicata o transformare liniara pentru a anula avantajele ce rezulta in urma tendintei algoritmului de a cauta pe axele de coordonate. Rezultatele obtinute sunt prezentate in urmatorul tabel, unde "B.F." (best found) reprezinta cea mai buna solutie gasita de algoritm, "SUCCES" reprezinta de cate ori a fost gasita cea mai buna solutie intr-o serie de rulari succesive ale algoritmului. \\
 
 
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+M & N & $\lambda$ & FUNC & BEST & MED. & WORST & B.F. & SUCCES & RULARI\\
+\hline
+20 & 35 & 1 & ELP & $10^6$ & - & - & $10^{-15}$ & 1/10 & 10 \\
+\hline
+20 & 35 & 1 & SCH & $10^6$ & - & - & $10^{-1}$ & 1/10 & 10 \\
+\hline
+20 & 80 & 1 & ROS & $10^6$ & - & - & $10^{1}$ & 28/50 & 50 \\
+\hline
+20 & 50 & 1 & ACKL & $10^6$ & - & - & $10^{-4}$ & 3/10 & 10 \\
+\hline
+20 & 400 & 4 & RTG & $10^6$ & - & - & $10^{2}$ & 10/10 & 10 \\
+\hline
+20 & 400 & 4 & RRTG & $10^6$ & - & - & $10^{2}$ & 10/10 & 10 \\
+\hline
+\end{tabular}
+\vspace{1mm}
+\\ \\
+Consideram ca performantele mai reduse comparativ cu cele din studiul de cercetare sunt datorate neimplementarii corecte a algoritmului sau faptului ca algoritmul ajunge sa se blocheze intr-un minim local. Am rulat SPC-PNX si pentru o configuratie cu M = 10, in acest caz obtinand performante mai bune pentru functiile ELP, SCH si ACKL.
 
 \end{enumerate}
 

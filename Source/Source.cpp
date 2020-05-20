@@ -19,7 +19,7 @@ int main() {
 	const double TARGET = 1e-20; //Target value for most objective functions
 	//down varies but up doesen't
 	const int runs = 10; //
-	const int M = 20; //No. of dimensions of an individual
+	const int M = 10; //No. of dimensions of an individual
 	const int N = 400; //No. of population individuals
 	const int lambda = 4; //No. of children
 	//up varies but down doesen't
